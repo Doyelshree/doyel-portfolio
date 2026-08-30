@@ -20,7 +20,7 @@
  *
  * 4. Update your social links:
  *    Just change the values in `socialHandles` below — every other config
- *    file (Meta, GitHub graph, CTA, chat assistant) reads from it.
+ *    file (Meta, GitHub graph, CTA) reads from it.
  *
  * That's it! Your portfolio will automatically update with your information.
  */

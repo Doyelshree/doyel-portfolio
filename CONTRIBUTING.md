@@ -41,7 +41,7 @@ doyel-portfolio/
 - Use **camelCase** for:
   - Utility functions: `formatDate.ts`
   - Hooks: `useMobile.ts`
-  - Configuration files: `chatPrompt.ts`
+  - Configuration files: `resume.ts`
 
 ### Components
 

@@ -50,10 +50,6 @@ export type AnalyticsEventData = {
     contentType: 'project' | 'experience';
     section: string;
   };
-  chat_message_sent: {
-    message: string;
-    sender: 'user' | 'assistant';
-  };
   external_link_click: {
     url: string;
     text: string;
