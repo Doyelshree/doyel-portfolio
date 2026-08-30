@@ -1,51 +1,46 @@
-import { navbarConfig } from '@/config/Navbar';
-import Image from 'next/image';
+import { House } from 'lucide-react';
+import { Link } from 'next-view-transitions';
 import React from 'react';
 
-import Container from './Container';
+import { Button } from '../ui/button';
 import { ThemeToggleButton } from './ThemeSwitch';
-import { TrackedLink } from './TrackedLink';
 
+/**
+ * Transparent sticky bar carrying a single pill of controls — home and the
+ * theme toggle — aligned to the top right. The bar itself paints nothing, so
+ * the page shows through; only the pill has a surface.
+ */
 export default function Navbar() {
   return (
-    <Container className="sticky top-0 z-20 rounded-md py-4 backdrop-blur-sm">
-      <div className="flex items-center justify-between px-6">
-        <div className="flex items-baseline gap-4">
-          <TrackedLink
-            href="/"
+    <header className="sticky top-0 z-30 w-full bg-transparent">
+      <nav
+        aria-label="Primary"
+        className="flex justify-end py-4 pr-12 pl-4 md:py-6 md:pr-84 md:pl-6"
+      >
+        <div className="flex items-center gap-1 rounded-full border border-gray-100 bg-white/70 p-1 shadow-sm backdrop-blur-md dark:border-gray-800 dark:bg-neutral-900/70">
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            className="size-10 rounded-full transition-all duration-300 active:scale-95"
             track={{
               name: 'button_click',
-              data: { buttonId: 'logo', section: 'navbar' },
+              data: { buttonId: 'home', section: 'navbar' },
             }}
           >
-            <Image
-              className="h-12 w-12 rounded-md border border-gray-200 bg-blue-300 transition-all duration-300 ease-in-out hover:scale-90 dark:bg-yellow-300"
-              src={navbarConfig.logo.src}
-              alt={navbarConfig.logo.alt}
-              width={navbarConfig.logo.width}
-              height={navbarConfig.logo.height}
-            />
-          </TrackedLink>
-          <div className="flex items-center justify-center gap-4">
-            {navbarConfig.navItems.map((item) => (
-              <TrackedLink
-                className="transition-all duration-300 ease-in-out hover:underline hover:decoration-2 hover:underline-offset-4"
-                key={item.label}
-                href={item.href}
-                track={{
-                  name: 'button_click',
-                  data: { buttonId: item.label, section: 'navbar' },
-                }}
-              >
-                {item.label}
-              </TrackedLink>
-            ))}
-          </div>
+            <Link href="/" aria-label="Home">
+              <House className="size-4" />
+            </Link>
+          </Button>
+          {/* Reveal originates from the toggle's own corner. */}
+          <ThemeToggleButton
+            className="rounded-full"
+            variant="circle"
+            start="top-right"
+            blur
+          />
         </div>
-        <div className="flex items-center gap-4">
-          <ThemeToggleButton variant="circle" start="top-right" blur />
-        </div>
-      </div>
-    </Container>
+      </nav>
+    </header>
   );
 }

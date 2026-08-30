@@ -1,4 +1,5 @@
 import AWS from '@/components/technologies/AWS';
+import C from '@/components/technologies/C';
 import CSS from '@/components/technologies/CSS';
 import Docker from '@/components/technologies/Docker';
 import Firebase from '@/components/technologies/Firebase';
@@ -38,6 +39,25 @@ export const projects: Project[] = [
     live: repo('smart-india-hackathon-2024'),
     details: true,
     projectDetailsPageSlug: '/projects/smart-india-hackathon-2024',
+    isWorking: true,
+  },
+  {
+    title: 'Cardiovascular Disease Risk Prediction',
+    description:
+      'End-to-end IoT + ML system scoring cardiovascular risk from live ECG and pulse-oximetry readings on an ESP32, aggregated over a stable sample window and classified by a tuned SVM across 11 features',
+    image: '/project/03-result.png',
+    link: repo('cardiovascular-risk-prediction'),
+    technologies: [
+      { name: 'React Native', icon: <ReactIcon key="react" /> },
+      { name: 'TypeScript', icon: <TypeScript key="typescript" /> },
+      { name: 'Python', icon: <Python key="python" /> },
+      { name: 'Flask', icon: <Flask key="flask" /> },
+      { name: 'C', icon: <C key="c" /> },
+    ],
+    github: repo('cardiovascular-risk-prediction'),
+    live: repo('cardiovascular-risk-prediction'),
+    details: true,
+    projectDetailsPageSlug: '/projects/cardiovascular-risk-prediction',
     isWorking: true,
   },
   {

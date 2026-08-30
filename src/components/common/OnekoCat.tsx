@@ -11,5 +11,11 @@ export default function OnekoCat() {
   // relative URL resolves against the current page: fine on /projects, but on
   // /projects/farmora it becomes /projects/oneko/oneko.js and 404s, and the cat
   // never loads for the rest of the session.
-  return <Script src="/oneko/oneko.js" data-cat="/oneko/oneko.gif" />;
+  return (
+    <Script
+      src="/oneko/oneko.js"
+      data-cat="/oneko/oneko.gif"
+      data-sound={String(catConfig.sound)}
+    />
+  );
 }

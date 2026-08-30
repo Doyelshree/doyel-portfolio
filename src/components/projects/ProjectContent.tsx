@@ -9,7 +9,6 @@ import { Link } from 'next-view-transitions';
 import Image from 'next/image';
 
 import Github from '../svgs/Github';
-import Website from '../svgs/Website';
 import { ProjectComponents } from './ProjectComponents';
 
 interface ProjectContentProps {
@@ -24,7 +23,6 @@ export function ProjectContent({ frontmatter, content }: ProjectContentProps) {
     image,
     technologies,
     github,
-    live,
     timeline,
     role,
     team,
@@ -112,29 +110,6 @@ export function ProjectContent({ frontmatter, content }: ProjectContentProps) {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3">
-            {live && (
-              <Button
-                asChild
-                track={{
-                  name: 'external_link_click',
-                  data: {
-                    url: live,
-                    text: 'Live Demo',
-                    location: 'project_detail',
-                  },
-                }}
-              >
-                <Link
-                  href={live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2"
-                >
-                  <Website className="size-4" />
-                  Live Demo
-                </Link>
-              </Button>
-            )}
             {github && (
               <Button
                 variant="outline"

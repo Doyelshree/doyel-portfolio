@@ -1,7 +1,8 @@
 import Container from '@/components/common/Container';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 import { generateMetadata as getMetadata } from '@/config/Meta';
 import { resumeConfig } from '@/config/Resume';
+import { Download } from 'lucide-react';
 import { Metadata } from 'next';
 import React from 'react';
 
@@ -22,23 +23,36 @@ export const metadata: Metadata = {
 
 export default function ResumePage() {
   return (
-    <Container className="py-16">
-      <div className="space-y-8">
-        <div className="space-y-4 text-center">
-          <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
-            Resume
-          </h1>
-          <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-            My resume.
-          </p>
+    <Container>
+      <div className="mx-auto w-full max-w-3xl space-y-4">
+        <div className="flex justify-end">
+          <Button
+            asChild
+            variant="outline"
+            track={{
+              name: 'button_click',
+              data: { buttonId: 'resume_download', section: 'resume_page' },
+            }}
+          >
+            {/* Same-origin, so `download` actually saves the file rather than
+                opening it in a tab. */}
+            <a
+              href={resumeConfig.url}
+              download={resumeConfig.fileName}
+              className="flex items-center gap-2"
+            >
+              <Download className="size-4" />
+              Download Resume
+            </a>
+          </Button>
         </div>
-        <Separator />
-        <div className="mx-auto max-w-2xl">
-          <iframe
-            src={resumeConfig.url}
-            className="min-h-screen w-full"
-          ></iframe>
-        </div>
+        {/* svh rather than vh so mobile browsers' collapsing toolbars do not
+            push the viewer past the bottom of the screen. */}
+        <iframe
+          src={resumeConfig.url}
+          title="Resume"
+          className="block h-[calc(100svh-12rem)] w-full rounded-lg border"
+        ></iframe>
       </div>
     </Container>
   );
