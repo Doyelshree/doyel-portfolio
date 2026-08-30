@@ -1,0 +1,85 @@
+---
+title: 'Alien Invaders - HTML5 Canvas Arcade Game'
+description: 'A responsive arcade game built with JavaScript and HTML5 Canvas, featuring collision detection, scoring, 5 enemy types, and 3 difficulty levels'
+image: '/project/alien-invaders.png'
+technologies: ['JavaScript', 'HTML5 Canvas', 'CSS']
+github: 'https://github.com/Doyelshree/alien-invaders'
+live: 'https://github.com/Doyelshree/alien-invaders'
+timeline: '2024'
+role: 'Developer'
+status: 'completed'
+featured: false
+challenges:
+  ['Collision Detection', 'Game Loop Performance', 'Responsive Canvas']
+learnings: ['OOP Design', 'Canvas Rendering', 'Game Loop Architecture']
+isPublished: true
+---
+
+# Alien Invaders
+
+## Overview
+
+A responsive arcade game built from scratch with **JavaScript** and the **HTML5 Canvas** API — no
+game engine, no libraries. Real-time animations, collision detection, scoring, **5 unique enemy
+types**, and **3 difficulty levels**, all driven by a hand-rolled game loop.
+
+## Why Build a Game
+
+Games are an unusually good way to learn object-oriented design, because the domain resists
+shortcuts. Every frame, dozens of entities need to update their own state, draw themselves, and
+know what they collide with. Get the class design wrong and the code becomes unmanageable within a
+few hundred lines.
+
+## Features
+
+- **5 Enemy Types**: Each with its own movement pattern, health, and scoring value
+- **3 Difficulty Levels**: Adjusting enemy speed, spawn rate, and aggression
+- **Collision Detection**: Projectile-to-enemy, enemy-to-player, and boundary handling
+- **Scoring System**: Points weighted by enemy type, with a running score display
+- **Real-time Animation**: Smooth rendering driven by `requestAnimationFrame`
+- **Responsive Controls**: Keyboard input that stays responsive under load
+- **Responsive Canvas**: The playfield scales to the viewport instead of assuming a fixed size
+
+## OOP Design
+
+The entity model is the backbone of the game:
+
+- A base **Entity** defines position, velocity, dimensions, and the `update()` / `draw()` contract
+- **Player**, **Enemy**, and **Projectile** extend it with their own behaviour
+- The five enemy types specialise `Enemy`, overriding movement and scoring rather than duplicating
+  the shared logic
+- A **Game** class owns the loop, the entity collections, and the collision pass
+
+Because every entity honours the same `update()` / `draw()` contract, the game loop stays short:
+advance everything, resolve collisions, draw everything, repeat. Adding a sixth enemy type is a
+subclass, not a change to the loop.
+
+## The Game Loop
+
+The loop runs on `requestAnimationFrame`, which ties updates to the browser's repaint cycle instead
+of a fixed timer. Each frame:
+
+1. Update every entity's position from its velocity
+2. Run the collision pass and resolve hits
+3. Remove destroyed entities and spawn new ones
+4. Clear the canvas and redraw the current state
+
+Keeping the collision pass separate from the update pass avoids an entire class of bugs where an
+entity is destroyed halfway through the frame while other entities still hold a reference to it.
+
+## Tech Stack
+
+- **JavaScript** — all game logic, entities, and the loop
+- **HTML5 Canvas** — rendering
+- **CSS** — page layout and responsive sizing
+
+## Key Learnings
+
+- **A shared entity contract keeps loops small**: One `update()` / `draw()` interface meant the
+  game loop never grew as the entity roster did.
+- **Separate the passes**: Update, then collide, then draw — mixing them creates bugs that only
+  reproduce at certain frame rates.
+- **`requestAnimationFrame` over `setInterval`**: Syncing to the repaint cycle produced noticeably
+  smoother motion and stopped the game from burning cycles in a background tab.
+- **Inheritance earns its keep here**: Five enemy variants from one base class was the case where
+  OOP genuinely reduced the amount of code rather than ceremonially organising it.

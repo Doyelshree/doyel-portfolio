@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node -v)",
+      "PowerShell(npm -v)",
+      "PowerShell($paths = @\\(\"$env:USERPROFILE\\\\.bun\\\\bin\\\\bun.exe\",\"$env:ProgramFiles\\\\nodejs\\\\node.exe\",\"$env:LOCALAPPDATA\\\\Programs\\\\nodejs\\\\node.exe\",\"$env:APPDATA\\\\npm\\\\npm.cmd\"\\); foreach \\($p in $paths\\) { \"{0} -> {1}\" -f $p, \\(Test-Path $p\\) }; \\(Get-Command winget -ErrorAction SilentlyContinue\\).Source)",
+      "PowerShell(\"--- User PATH ---\"; [Environment]::GetEnvironmentVariable\\('Path','User'\\); \"--- Machine PATH ---\"; [Environment]::GetEnvironmentVariable\\('Path','Machine'\\))",
+      "PowerShell(& \"$env:USERPROFILE\\\\.bun\\\\bin\\\\bun.exe\" --version; & \"$env:ProgramFiles\\\\nodejs\\\\node.exe\" -v)"
+    ]
+  }
+}

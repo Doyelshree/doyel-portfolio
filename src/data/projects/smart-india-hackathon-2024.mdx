@@ -1,0 +1,117 @@
+---
+title: 'Smart India Hackathon 2024 - Mentorship Platform'
+description: 'A mentorship platform that placed 2nd among 500+ teams at Smart India Hackathon 2024, matching mentors and mentees with 92% compatibility accuracy'
+image: '/project/sih-2024.png'
+technologies:
+  [
+    'React.js',
+    'Tailwind CSS',
+    'Flask',
+    'Python',
+    'Docker',
+    'Firebase',
+    'Cal.com API',
+    'OpenAI API',
+  ]
+github: 'https://github.com/Doyelshree/smart-india-hackathon-2024'
+live: 'https://github.com/Doyelshree/smart-india-hackathon-2024'
+timeline: '2024'
+role: 'Full Stack Developer'
+team: '6 members'
+status: 'completed'
+featured: true
+challenges:
+  ['Mentor-Mentee Matching', 'Real-time Scheduling', 'Scaling to 1000+ Users']
+learnings:
+  ['Matching Algorithms', 'API Integration', 'Building Under Time Pressure']
+isPublished: true
+---
+
+# Smart India Hackathon 2024: A Mentorship Platform
+
+## Overview
+
+Smart India Hackathon is a nationwide initiative that puts student teams against real problem
+statements from government bodies and industry. Our team of six built a mentorship platform for
+the Punjab edition — a system that connects mentees with the right mentors, schedules sessions
+around everyone's availability, and layers AI-driven career guidance on top.
+
+We placed **2nd among 500+ teams**, and the platform was designed to serve **1000+ potential
+users**.
+
+## My Role
+
+I worked as a **full stack developer** on the team, which meant moving between the React frontend
+and the Flask backend depending on where the bottleneck was that day.
+
+## What the Platform Does
+
+- **Mentor-Mentee Matching**: Suggests mentors based on domain, goals, experience level, and
+  availability — reaching **92% compatibility accuracy** against our evaluation set
+- **Real-time Scheduling**: Books and manages sessions, handling **50+ concurrent sessions**
+  without double-booking mentors
+- **AI Career Guidance**: Uses the OpenAI API to answer career questions and suggest learning
+  paths between mentorship sessions
+- **Mentor Profiles**: Verified profiles with expertise tags, session history, and feedback
+- **Session Management**: Calendar integration via the Cal.com API so mentors keep using the
+  calendar they already have
+- **Progress Tracking**: Mentees track goals and session outcomes over time
+
+## The Matching Problem
+
+The interesting part of this build was not the CRUD — it was deciding what "a good match" means.
+A mentee's stated goal, their current skill level, the mentor's domain, and the practical question
+of whether two people can actually find a shared hour in a week all pull in different directions.
+
+Our approach scored candidate pairs across weighted dimensions:
+
+- **Domain overlap** between the mentee's goals and the mentor's expertise tags
+- **Experience gap** — close enough to be relatable, far enough to be useful
+- **Availability intersection**, computed from both calendars before a pair is ever suggested
+- **Feedback history**, so mentors who consistently helped people in a domain rank higher there
+
+Folding availability into the score rather than checking it afterwards was what took the matching
+from "plausible suggestions" to "suggestions that turn into booked sessions."
+
+## Tech Stack
+
+### Frontend
+
+- **React.js** — component-driven UI for the mentee, mentor, and admin views
+- **Tailwind CSS** — utility-first styling to move fast during the hackathon
+
+### Backend
+
+- **Flask (Python)** — REST API for matching, scheduling, and profile management
+- **Firebase** — authentication and real-time data for session state
+- **Docker** — containerised services so the whole team ran an identical environment
+
+### Integrations
+
+- **Cal.com API** — scheduling and calendar sync
+- **OpenAI API** — AI-driven career guidance and conversation support
+
+## Why We Built It
+
+Mentorship programmes usually fail for unglamorous reasons: the matching is manual, so it does not
+scale; scheduling falls apart over email; and once a pair is matched, nothing tracks whether the
+relationship is actually working. We wanted the platform to handle all three so mentors could spend
+their time mentoring.
+
+## Results
+
+- **2nd place** among 500+ competing teams
+- **92% compatibility accuracy** on mentor-mentee matching
+- **50+ concurrent sessions** handled by the scheduling layer
+- Designed to serve **1000+ potential users**
+
+## Key Learnings
+
+- **Scoring beats filtering**: A weighted score with availability built in produced far better
+  matches than sequential filters.
+- **Integrate, don't rebuild**: Using Cal.com for scheduling saved days we spent on the matching
+  logic instead.
+- **Containerise early**: Docker removed an entire class of "works on my machine" problems in a
+  six-person team on a deadline.
+- **Six people need clear seams**: Splitting the API surface up front let frontend and backend
+  work proceed in parallel without constant merge pain.

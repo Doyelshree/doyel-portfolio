@@ -1,0 +1,84 @@
+---
+title: 'AWS S3 File Uploader'
+description: 'A full-stack file management application pairing a Spring Boot API with a React client, backed by AWS S3 for secure uploads'
+image: '/project/aws-s3-uploader.png'
+technologies: ['Java', 'Spring Boot', 'Maven', 'React', 'TypeScript', 'AWS S3']
+github: 'https://github.com/Doyelshree/aws-s3-file-uploader'
+live: 'https://github.com/Doyelshree/aws-s3-file-uploader'
+timeline: '2025'
+role: 'Full Stack Developer'
+status: 'completed'
+featured: true
+challenges: ['Secure Cloud Uploads', 'File Validation', 'Responsive UI']
+learnings: ['Spring Boot APIs', 'AWS S3 Integration', 'Full-Stack Type Safety']
+isPublished: true
+---
+
+# AWS S3 File Uploader
+
+## Overview
+
+A full-stack web application for seamless file management: a **Spring Boot (Java)** backend that
+talks to **AWS S3**, and a **React + TypeScript** frontend that makes uploading, browsing, and
+managing files feel immediate.
+
+The goal was to build the whole path properly — authentication, validation, cloud storage, and a
+UI that behaves well on any screen — rather than a demo that only handles the happy path.
+
+## Features
+
+- **File Uploads**: Upload files straight to AWS S3 with progress feedback
+- **Authentication**: Protected endpoints so only authenticated users touch storage
+- **Validation**: File type and size checks on both the client and the server
+- **File Management**: List, download, and delete stored objects
+- **Responsive UI**: A layout that works from phone to desktop
+- **Error Handling**: Clear, specific failures instead of a generic "upload failed"
+
+## Architecture
+
+### Backend — Spring Boot
+
+The API is a Spring Boot service built with **Maven**, structured in conventional layers:
+
+- **Controllers** expose the REST endpoints for upload, list, download, and delete
+- **Services** hold the S3 interaction logic and validation rules
+- **Configuration** keeps AWS credentials and bucket settings out of the code and in the
+  environment
+
+Using the AWS SDK from the backend rather than uploading from the browser means credentials never
+reach the client, and every upload passes through server-side validation before it becomes an
+object in the bucket.
+
+### Frontend — React + TypeScript
+
+- **TypeScript** types shared across the API surface, so a change to a response shape surfaces at
+  compile time rather than in production
+- Upload state handled explicitly — idle, uploading, succeeded, failed — so the UI always reflects
+  what is actually happening
+- A responsive file browser for the objects in the bucket
+
+## Why Validate Twice
+
+Client-side validation exists to give fast feedback; server-side validation exists because the
+client can be bypassed. Rejecting an oversized file in the browser saves the user a slow upload;
+rejecting it again in the Spring Boot service is what actually protects the bucket.
+
+## Tech Stack
+
+- **Java** — backend language
+- **Spring Boot** — REST API framework
+- **Maven** — build and dependency management
+- **React** — frontend UI
+- **TypeScript** — type safety across the client
+- **AWS S3** — object storage
+
+## Key Learnings
+
+- **Server-side SDK, always**: Keeping the AWS SDK on the backend is the difference between a
+  demo and something you would deploy.
+- **Layered Spring Boot pays off**: The controller/service/config split made adding delete and
+  download endpoints almost mechanical.
+- **Types across the boundary**: Sharing types between the React client and the API caught more
+  bugs than any test I wrote for this project.
+- **Configuration is code you don't commit**: Externalising bucket names and credentials made the
+  app deployable to a different bucket without touching a line of source.

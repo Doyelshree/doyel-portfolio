@@ -1,0 +1,94 @@
+---
+title: 'Farmora - Agricultural Disease Detection Platform'
+description: 'A plant disease detection platform trained on 10,000+ labeled images, reaching 88% accuracy across 38 disease classes, with a Gemini-powered chatbot for real-time crop advice'
+image: '/project/farmora.png'
+technologies: ['Python', 'JavaScript', 'HTML/CSS', 'REST API', 'Gemini AI']
+github: 'https://github.com/Doyelshree/Farmora'
+live: 'https://github.com/Doyelshree/Farmora'
+timeline: '2025'
+role: 'Full Stack + ML'
+status: 'completed'
+featured: true
+challenges:
+  ['38-Class Classification', 'Dataset Quality', 'Making ML Output Actionable']
+learnings: ['Image Classification', 'ML Model Serving', 'LLM Integration']
+isPublished: true
+---
+
+# Farmora: Agricultural Disease Detection
+
+## Overview
+
+Farmora is a full-stack web application that identifies plant diseases from a photograph of a leaf
+and then tells the farmer what to do about it. The classifier was trained on a dataset of
+**10,000+ labeled plant images** and reaches **88% classification accuracy across 38 disease
+classes**.
+
+Detection alone is only half a product, so the platform pairs the model with a **Gemini AI
+chatbot** that turns a class label into practical, real-time crop advice.
+
+## The Problem
+
+Crop disease is diagnosed late far more often than it is diagnosed wrong. By the time visible
+damage is severe enough to be obvious, the window for cheap intervention has usually closed. Expert
+agronomists exist, but they are not reachable from most fields on the day they are needed.
+
+Farmora aims at that gap: a phone camera, a fast answer, and specific next steps.
+
+## What It Does
+
+- **Disease Detection**: Upload a leaf image and get a predicted disease class with a confidence
+  score
+- **38 Disease Classes**: Coverage across multiple crop types and conditions
+- **AI Crop Advice**: A Gemini-powered chatbot answers follow-up questions in plain language —
+  treatment options, prevention, and whether the problem is likely to spread
+- **Healthy vs. Diseased**: Distinguishes healthy leaves rather than forcing every image into a
+  disease class
+- **Web Interface**: Runs in a browser, no app install needed
+- **REST API**: The ML backend is exposed as an API, so the model can be reused by other clients
+
+## The ML Side
+
+### Dataset
+
+Training used a labeled dataset of over **10,000 plant images** spanning 38 classes. The class
+distribution was uneven — some diseases are simply better represented in public datasets than
+others — which shaped both the augmentation strategy and how the results were read.
+
+### Why 88% Is the Honest Number
+
+Overall accuracy across 38 classes hides variation between them. Visually distinctive diseases
+classify very reliably; the harder cases are the ones that look alike in early stages, which is
+exactly when a farmer most wants to know. Reporting the aggregate number alongside per-class
+behaviour was more useful than optimising a single headline figure.
+
+### Serving
+
+The trained model sits behind a **REST API**, which keeps the ML work separate from the web
+application. The frontend sends an image, receives a prediction, and hands the label to the chatbot
+for the advisory layer.
+
+## Tech Stack
+
+- **Python** — model training and the ML backend
+- **JavaScript** — frontend behaviour
+- **HTML/CSS** — interface
+- **REST API** — the boundary between the web app and the model
+- **Gemini AI** — conversational crop advice
+
+## Impact
+
+- **10,000+** labeled images used in training
+- **88%** classification accuracy across **38** disease classes
+- Built to help farmers reduce crop losses and improve yield quality by catching disease earlier
+
+## Key Learnings
+
+- **A prediction is not advice**: The chatbot layer is what made the model's output usable. A class
+  label alone does not tell a farmer what to spray.
+- **Aggregate accuracy is a summary, not a verdict**: Per-class performance mattered far more for
+  judging whether the system was actually helpful.
+- **Separating the model behind an API** kept the ML work independently testable and let the
+  frontend evolve without retraining anything.
+- **Data quality dominates**: Time spent on the dataset moved accuracy more than time spent on
+  architecture.
