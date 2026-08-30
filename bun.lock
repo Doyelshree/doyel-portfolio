@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "sleek-portfolio",
+      "name": "doyel-portfolio",
       "dependencies": {
         "@calcom/embed-react": "^1.5.3",
         "@hookform/resolvers": "^5.1.1",

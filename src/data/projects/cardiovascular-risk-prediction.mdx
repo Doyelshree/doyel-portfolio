@@ -1,0 +1,135 @@
+---
+title: 'Cardiovascular Disease Risk Prediction'
+description: 'An end-to-end IoT + ML system that predicts cardiovascular disease risk from live ECG and pulse-oximetry readings combined with manually entered patient details'
+image: '/project/03-result.png'
+technologies:
+  [
+    'React Native',
+    'Expo',
+    'TypeScript',
+    'Python',
+    'Flask',
+    'scikit-learn',
+    'ESP32',
+  ]
+github: 'https://github.com/Doyelshree/cardiovascular-risk-prediction'
+live: 'https://github.com/Doyelshree/cardiovascular-risk-prediction'
+timeline: '2025'
+role: 'Full Stack & ML Developer'
+status: 'completed'
+featured: true
+challenges:
+  ['Noisy Sensor Data', 'Serial Port Ownership', 'Partial Patient Input']
+learnings: ['IoT Data Pipelines', 'SVM Tuning', 'Honest Model Reporting']
+isPublished: true
+---
+
+# Cardiovascular Disease Risk Prediction
+
+## Overview
+
+An end-to-end system that predicts cardiovascular disease risk by combining **live IoT sensor
+readings** — ECG and pulse oximetry from an ESP32 — with **manually entered patient details**,
+scored by an **SVM model** trained on the Heart Failure Prediction dataset.
+
+The interesting problem here was not the model. It was everything around it: sensors produce
+noisy, intermittent data, clinicians do not always have every field to hand, and a prediction
+built on bad inputs is worse than no prediction at all.
+
+## The Three Parts
+
+| Part            | Tech                             | What it does                                                                 |
+| --------------- | -------------------------------- | ---------------------------------------------------------------------------- |
+| **Mobile app**  | React Native · Expo · TypeScript | Collects patient details, drives the live sensor scan, shows the risk result |
+| **Backend API** | Flask · scikit-learn · pyserial  | Owns the serial port, aggregates sensor samples, serves predictions          |
+| **IoT device**  | ESP32 · AD8232 (ECG) · MAX30102  | Streams heart rate, SpO₂ and ST-segment metrics over USB serial              |
+
+## How It Works
+
+The model uses **11 features**. Five come straight off the IoT device, six are entered by the
+clinician in the app:
+
+```
+AD8232 (ECG)      ──► MaxHR           direct, from R-peak intervals
+AD8232 (ECG)      ──► RestingECG      Normal / ST / LVH
+AD8232 (ECG)      ──► Oldpeak         ST depression
+AD8232 (ECG)      ──► ST_Slope        Up / Flat / Down
+MAX30102 (SpO₂)   ──► ExerciseAngina  proxy: SpO₂ < 90% → Y
+
+Manual entry      ──► Age, Sex, ChestPainType, RestingBP, Cholesterol, FastingBS
+```
+
+Any manual field left blank is filled with that feature's **population median**, and the API
+reports how many features were imputed so the result is never silently over-stated. A prediction
+built on six guessed values is not the same as one built on six measured ones, and the response
+says so.
+
+## The Scan Flow
+
+Getting a trustworthy reading out of a finger sensor takes more than reading one value:
+
+1. The app polls `GET /sensor_status` once per second and shows live HR, SpO₂, finger and lead
+   status.
+2. It waits for **at least 10 s of warm-up** _and_ **10 stable samples** — whichever finishes last
+   — then calls `POST /scan`.
+3. `/scan` returns the **median** of the good samples in the window, so a single noisy reading
+   cannot skew the input.
+4. `POST /predict_iot` validates the readings, builds the feature vector, and returns the
+   prediction with a confidence score and plain-language labels.
+
+A sample only counts as "good" when the finger is detected, the ECG signal is clean, HR ≥ 40 bpm,
+and SpO₂ sits between 80–100%. Everything else is discarded before it reaches the model.
+
+## Validation That Refuses
+
+The API returns **422** rather than a prediction when readings fail validation — out-of-range
+HR or SpO₂, an unrecognised `st_slope` or `resting_ecg`, or `ecg_signal_good: 0` from poor
+electrode contact. The error says what to fix, and the app surfaces it directly.
+
+Returning a low-confidence guess would have been easier. But a health-adjacent tool that answers
+confidently from garbage input is actively harmful, so the design choice was to fail loudly and
+tell the user to reseat the electrodes.
+
+## The Model
+
+- **Dataset**: [Heart Failure Prediction](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction)
+  (fedesoriano)
+- **Algorithm**: SVM (`SVC`, `probability=True`) tuned with `GridSearchCV` over `C`, `gamma` and
+  `kernel` (rbf / linear / sigmoid), 5-fold CV
+- **Preprocessing**: `StandardScaler` with fixed categorical encodings
+- **Split**: 80 / 20, `random_state=42`
+
+Training saves four artifacts — the model, the scaler, the feature medians, and the encodings —
+so the API loads exactly the transformation the model was trained under. The medians ship as an
+artifact for the same reason: imputation has to match training, not be recomputed at request time.
+
+## Running Without Hardware
+
+The backend has a mock mode that synthesises plausible readings, so the entire flow is demoable
+end to end without an ESP32 on the desk. Mock scans are labelled `MOCK` in the app — a demo that
+is indistinguishable from a real reading is a trap waiting to be walked into.
+
+## Tech Stack
+
+- **React Native + Expo** — cross-platform mobile client
+- **TypeScript** — type safety across the app
+- **Flask** — REST API server
+- **scikit-learn** — SVM training and inference
+- **pyserial** — ESP32 serial communication
+- **ESP32 + AD8232 + MAX30102** — ECG and pulse-oximetry hardware
+
+## Key Learnings
+
+- **Aggregate, never trust one sample**: Taking the median of a stable window turned a jittery
+  sensor into a usable input. The single biggest accuracy win came from the data pipeline, not the
+  model.
+- **Report your uncertainty**: Surfacing `imputed_count` cost a few lines and changed how the
+  output should be read. Silence about missing inputs is a form of over-claiming.
+- **One process owns the port**: Serial ports do not share. Putting the reader in a single
+  background thread behind the API removed a whole class of "why is it not connecting" bugs.
+- **Mock modes need to look like mocks**: The label matters more than the mock.
+
+## Disclaimer
+
+This is a research and educational project. It is **not** a medical device and must not be used
+for diagnosis or treatment decisions.

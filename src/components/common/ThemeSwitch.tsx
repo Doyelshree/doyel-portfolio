@@ -1,6 +1,7 @@
 'use client';
 
 import { useUmami } from '@/hooks/use-umami';
+import { useWaterDropSound } from '@/hooks/use-water-drop-sound';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -23,6 +24,7 @@ export const useThemeToggle = ({
   const { setTheme, resolvedTheme } = useTheme();
 
   const { trackEvent } = useUmami();
+  const { playWaterDrop } = useWaterDropSound();
 
   const [isDark, setIsDark] = useState(false);
 
@@ -48,6 +50,9 @@ export const useThemeToggle = ({
 
   const toggleTheme = useCallback(() => {
     setIsDark(!isDark);
+
+    // Fired from the click itself so the autoplay policy lets it through.
+    playWaterDrop();
 
     const from = isDark ? 'dark' : 'light';
     const to = isDark ? 'light' : 'dark';
@@ -84,6 +89,7 @@ export const useThemeToggle = ({
     isDark,
     setIsDark,
     trackEvent,
+    playWaterDrop,
   ]);
 
   const setCrazyLightTheme = useCallback(() => {

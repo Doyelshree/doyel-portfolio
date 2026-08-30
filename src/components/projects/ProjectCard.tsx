@@ -22,7 +22,6 @@ import React, { useState } from 'react';
 import ArrowRight from '../svgs/ArrowRight';
 import Github from '../svgs/Github';
 import PlayCircle from '../svgs/PlayCircle';
-import Website from '../svgs/Website';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { WobbleImage } from '../ui/wobble-image';
 
@@ -111,21 +110,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
               </h3>
             </Link>
             <div className="flex items-center gap-2">
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link
-                    className="text-secondary hover:text-primary flex size-6 items-center justify-center transition-colors"
-                    href={project.link}
-                    target="_blank"
-                    onClick={() => trackProject('visit_website')}
-                  >
-                    <Website />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>View Website</p>
-                </TooltipContent>
-              </Tooltip>
               <Tooltip>
                 <TooltipTrigger>
                   {project.github && (
