@@ -13,7 +13,7 @@
     "format:all": "bun run format:prettierrc && bun run format:prettierrcjson",
     "prepare": "husky",
     "knip": "knip",
-    "test-telegram": "bun src/validate/testTelegram.ts"
+    "test-email": "bun src/validate/testEmail.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -83,6 +83,7 @@
     "rehype-stringify": "^10.0.1",
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
+    "resend": "^6.25.0",
     "shiki": "^3.7.0",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",

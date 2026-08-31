@@ -35,14 +35,9 @@ const contactFormSchema = z.object({
   email: z.string().email({
     message: 'Please enter a valid email address.',
   }),
-  phone: z
-    .string()
-    .min(10, {
-      message: 'Phone number must be at least 10 characters.',
-    })
-    .regex(/^[\+]?[1-9][\d]{0,15}$/, {
-      message: 'Please enter a valid phone number.',
-    }),
+  // Honeypot — hidden from real visitors, so anything here means a bot. The
+  // API silently accepts and discards those submissions.
+  website: z.string().max(0).optional(),
   message: z
     .string()
     .min(10, {
@@ -64,7 +59,7 @@ export default function ContactForm() {
     defaultValues: {
       name: '',
       email: '',
-      phone: '',
+      website: '',
       message: '',
     },
   });
@@ -144,12 +139,16 @@ export default function ContactForm() {
               />
               <FormField
                 control={form.control}
-                name="phone"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone *</FormLabel>
+                    <FormLabel>Email *</FormLabel>
                     <FormControl>
-                      <Input placeholder="+1 (123) xxx-xxxx" {...field} />
+                      <Input
+                        placeholder="your.email@example.com"
+                        type="email"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -157,20 +156,24 @@ export default function ContactForm() {
               />
             </div>
 
+            {/*
+              Honeypot. Hidden from people and from screen readers, and skipped
+              by tabbing, so only a bot auto-filling every input will touch it.
+              The API discards any submission that arrives with it filled.
+            */}
             <FormField
               control={form.control}
-              name="email"
+              name="website"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email *</FormLabel>
+                <FormItem className="hidden" aria-hidden="true">
                   <FormControl>
                     <Input
-                      placeholder="your.email@example.com"
-                      type="email"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      placeholder="Leave this field empty"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />

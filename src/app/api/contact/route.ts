@@ -1,4 +1,6 @@
+import { socialHandles } from '@/config/Hero';
 import { NextRequest, NextResponse } from 'next/server';
+import { Resend } from 'resend';
 import * as z from 'zod';
 
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
@@ -6,11 +8,17 @@ const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
 
+// Resend's shared test domain. Swap this for an address on your own verified
+// domain (via CONTACT_FROM_EMAIL) once you have one — no other code changes.
+const DEFAULT_FROM = 'Portfolio Contact <onboarding@resend.dev>';
+
 const contactSchema = z.object({
-  name: z.string().min(2).max(100),
-  email: z.string().email(),
-  phone: z.string().min(10).max(20),
-  message: z.string().min(10).max(1000),
+  name: z.string().trim().min(2).max(100),
+  email: z.string().trim().email(),
+  message: z.string().trim().min(10).max(1000),
+  // Honeypot. The form renders this hidden, so a real visitor always leaves it
+  // empty; anything in it came from a bot filling every input it found.
+  website: z.string().optional(),
 });
 
 function getClientIP(request: NextRequest): string {
@@ -62,63 +70,79 @@ function checkRateLimit(clientIP: string): {
   };
 }
 
-async function sendToTelegram(data: {
+/**
+ * Everything a visitor types is interpolated into the HTML body, so it has to
+ * be escaped — otherwise a message containing markup would render as markup in
+ * the inbox.
+ */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+async function sendEmail(data: {
   name: string;
   email: string;
-  phone: string;
   message: string;
 }): Promise<boolean> {
-  const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
-  const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+  const apiKey = process.env.RESEND_API_KEY;
 
-  if (!telegramToken) {
-    console.error('TELEGRAM_BOT_TOKEN not configured');
+  if (!apiKey) {
+    console.error('RESEND_API_KEY not configured');
     return false;
   }
 
-  if (!telegramChatId) {
-    console.error('TELEGRAM_CHAT_ID not configured');
-    return false;
-  }
+  // Defaults to the address in the Hero config — the repo's single source of
+  // truth for contact details. On Resend's test domain this has to be the same
+  // address the Resend account was created with, or delivery is refused.
+  const to = process.env.CONTACT_TO_EMAIL || socialHandles.email;
+  const from = process.env.CONTACT_FROM_EMAIL || DEFAULT_FROM;
+  const submittedAt = new Date().toISOString();
 
-  const message = `
-🔔 *New Contact Form Submission*
+  const text = [
+    `Name:  ${data.name}`,
+    `Email: ${data.email}`,
+    '',
+    data.message,
+    '',
+    `Submitted: ${submittedAt}`,
+  ].join('\n');
 
-👤 *Name:* ${data.name.trim()}
-📧 *Email:* ${data.email.trim()}
-📱 *Phone:* ${data.phone.trim()}
-
-💬 *Message:*
-${data.message.trim()}
-
-⏰ *Submitted:* ${new Date().toISOString()}
-📍 *Timezone:* ${Intl.DateTimeFormat().resolvedOptions().timeZone}
+  const html = `
+    <div style="font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #111;">
+      <h2 style="margin: 0 0 16px; font-size: 18px;">New portfolio message</h2>
+      <p style="margin: 0 0 4px;"><strong>Name:</strong> ${escapeHtml(data.name)}</p>
+      <p style="margin: 0 0 16px;"><strong>Email:</strong> ${escapeHtml(data.email)}</p>
+      <div style="padding: 16px; background: #f5f5f5; border-radius: 8px; white-space: pre-wrap;">${escapeHtml(
+        data.message,
+      )}</div>
+      <p style="margin: 16px 0 0; font-size: 12px; color: #666;">Submitted ${submittedAt}</p>
+    </div>
   `.trim();
 
   try {
-    const telegramUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
-
-    const response = await fetch(telegramUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        chat_id: telegramChatId,
-        text: message,
-        parse_mode: 'Markdown',
-      }),
+    const { data: sent, error } = await new Resend(apiKey).emails.send({
+      from,
+      to,
+      // So replying from the inbox reaches the visitor rather than yourself.
+      replyTo: data.email,
+      subject: `New portfolio message from ${data.name}`,
+      text,
+      html,
     });
 
-    if (response.ok) {
-      return true;
-    } else {
-      const errorText = await response.text();
-      console.error('Failed to send to Telegram:', errorText);
+    if (error) {
+      console.error('Failed to send contact email:', error);
       return false;
     }
+
+    return Boolean(sent);
   } catch (error) {
-    console.error('Error sending to Telegram:', error);
+    console.error('Error sending contact email:', error);
     return false;
   }
 }
@@ -148,9 +172,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = contactSchema.parse(body);
 
-    const telegramSent = await sendToTelegram(validatedData);
+    // Report success without sending. Telling a bot that the honeypot gave it
+    // away only teaches it to skip the field next time.
+    if (validatedData.website) {
+      return NextResponse.json({
+        message: 'Message sent successfully!',
+        success: true,
+      });
+    }
 
-    if (!telegramSent) {
+    const emailSent = await sendEmail(validatedData);
+
+    if (!emailSent) {
       return NextResponse.json(
         { error: 'Failed to send message. Please try again.' },
         { status: 500 },
