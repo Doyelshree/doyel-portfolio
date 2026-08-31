@@ -87,6 +87,8 @@ export default async function ProjectCaseStudyPage({
             variant="ghost"
             asChild
             className="group"
+            data-cuelume-press
+            data-cuelume-release
             track={{
               name: 'button_click',
               data: { buttonId: 'project_back', section: 'project_detail' },
@@ -165,6 +167,7 @@ export default async function ProjectCaseStudyPage({
                             .map((tech) => (
                               <span
                                 key={tech}
+                                data-cuelume-hover="tick"
                                 className="bg-muted rounded px-2 py-1 text-xs"
                               >
                                 {tech}

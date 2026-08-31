@@ -176,6 +176,10 @@ export const ThemeToggleButton = ({
       )}
       onClick={toggleTheme}
       aria-label="Toggle theme"
+      // Opts out of the site-wide cuelume press/release click. This button has
+      // its own voice — the water drop in `toggleTheme` — and layering the two
+      // just muddies it.
+      data-cuelume-ignore
     >
       <span className="sr-only">Toggle theme</span>
       {isDark ? <Moon className="size-4" /> : <Sun className="size-4" />}

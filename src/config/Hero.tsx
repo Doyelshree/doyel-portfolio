@@ -113,7 +113,7 @@ export const heroConfig = {
   // Description Configuration
   description: {
     template:
-      'I build full stack products with {skills:0}, {skills:1}, {skills:2}, and {skills:3}. An <b>IT graduate</b> of Techno Main Salt Lake, with a soft spot for <b>machine learning</b> and evolutionary computation.',
+      'I build full stack products with {skills:0}, {skills:1}, {skills:2}, and {skills:3}. An <b>IT graduate</b> of Techno Main Salt Lake, with a soft spot for <b>machine learning</b> and cybersecurity.',
   },
 
   // Buttons Configuration

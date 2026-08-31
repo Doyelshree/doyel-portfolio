@@ -9,7 +9,7 @@ import path from 'path';
 import React from 'react';
 
 export const metadata: Metadata = {
-  ...getMetadata('/journey/certificates'),
+  ...getMetadata('/certificates'),
   robots: { index: true, follow: true },
 };
 

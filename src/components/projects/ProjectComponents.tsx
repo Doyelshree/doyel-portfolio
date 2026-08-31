@@ -44,7 +44,10 @@ const Technology = ({ name }: { name: string }) => {
     TechnologyComponents[name] || TechnologyComponents[name.toLowerCase()];
 
   return (
-    <div className="bg-muted/50 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium">
+    <div
+      data-cuelume-hover="tick"
+      className="bg-muted/50 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium"
+    >
       {TechComponent && <TechComponent />}
       <span>{name}</span>
     </div>

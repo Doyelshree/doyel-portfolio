@@ -3,6 +3,7 @@ import Footer from '@/components/common/Footer';
 import Navbar from '@/components/common/Navbar';
 import OnekoCat from '@/components/common/OnekoCat';
 import { Quote } from '@/components/common/Quote';
+import SoundProvider from '@/components/common/SoundProvider';
 import { ThemeProvider } from '@/components/common/ThemeProviders';
 import { generateMetadata as getMetadata } from '@/config/Meta';
 import ReactLenis from 'lenis/react';
@@ -28,6 +29,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ReactLenis root>
+              <SoundProvider />
               <Navbar />
               {children}
               <OnekoCat />

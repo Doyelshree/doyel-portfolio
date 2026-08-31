@@ -59,7 +59,12 @@ export function ProjectContent({ frontmatter, content }: ProjectContentProps) {
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </Badge>
             {technologies.slice(0, 3).map((tech) => (
-              <Badge key={tech} variant="outline" className="text-xs">
+              <Badge
+                key={tech}
+                data-cuelume-hover="tick"
+                variant="outline"
+                className="text-xs"
+              >
                 {tech}
               </Badge>
             ))}
@@ -148,6 +153,7 @@ export function ProjectContent({ frontmatter, content }: ProjectContentProps) {
             {technologies.map((tech) => (
               <div
                 key={tech}
+                data-cuelume-hover="tick"
                 className="bg-muted/50 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium"
               >
                 <span>{tech}</span>

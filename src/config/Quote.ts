@@ -1,20 +1,19 @@
 export const quotes = [
   {
-    quote: `A man who is master of patience is master of everything else.`,
-    author: 'George Savile',
+    quote: `Identity theft is not a joke, Jim! Millions of families suffer every year.`,
+    author: 'Dwight Schrute',
   },
   {
-    quote: `You have a right to perform your prescribed duty, but you are not
-            entitled to the fruits of actions.`,
-    author: 'Bhagavad Gita',
+    quote: `Its a moo point. Like a cows opinion...it just doesn't matter...Its moo.`,
+    author: 'Phoebe Buffay',
   },
   {
-    quote: `Man is made by his belief. As he believes, so he is.`,
-    author: 'Bhagavad Gita',
+    quote: `Don't make me an optimistic, you will ruin my life.`,
+    author: 'Fleabag',
   },
   {
-    quote: `Arise, awake, and stop not till the goal is reached.`,
-    author: 'Katha Upanishad',
+    quote: `Sometimes I’ll start a sentence and I don’t even know where it’s going. I just hope I find it along the way.`,
+    author: 'Michael Scott',
   },
   {
     quote: `If the pain doesn't kill me, it will only make me stronger.`,

@@ -240,7 +240,7 @@
     inset 0 2px 6px rgba(255, 255, 255, 0.04);
 }
 
-/* Long-form MDX (journey, project case studies) typography scale */
+/* Long-form MDX (project case studies) typography scale */
 .prose {
   font-size: var(--content-font-size);
 }

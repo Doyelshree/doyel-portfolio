@@ -31,7 +31,7 @@ export default function Research() {
             },
           }}
         >
-          <Link href="/journey/certificates">View certificates</Link>
+          <Link href="/certificates">View certificates</Link>
         </Button>
       </div>
     </Container>
