@@ -16,7 +16,7 @@ export const siteConfig = {
   description:
     'Portfolio of Doyelshree Bhui — Full Stack Developer and IT graduate of Techno Main Salt Lake, Kolkata.',
   url: process.env.NEXT_PUBLIC_URL || 'http://localhost:3000',
-  ogImage: '/meta/opengraph-image.png',
+  ogImage: '/meta/og.jpg',
   author: {
     name: about.name,
     github: socialHandles.github,
@@ -50,7 +50,6 @@ export const pageMetadata: Record<string, PageMeta> = {
       'web development',
       'projects',
     ],
-    ogImage: '/meta/hero.png',
     twitterCard: 'summary_large_image',
   },
 
@@ -60,8 +59,7 @@ export const pageMetadata: Record<string, PageMeta> = {
     description:
       "Get in touch with me for collaborations, projects, or opportunities. I'd love to hear from you!",
     keywords: ['contact', 'hire', 'collaboration', 'freelance', 'developer'],
-    ogImage: '/assets/logo.png',
-    twitterCard: 'summary',
+    twitterCard: 'summary_large_image',
   },
 
   // Work Experience page
@@ -76,7 +74,6 @@ export const pageMetadata: Record<string, PageMeta> = {
       'software developer',
       'employment history',
     ],
-    ogImage: '/meta/work.png',
     twitterCard: 'summary_large_image',
   },
 
@@ -92,7 +89,6 @@ export const pageMetadata: Record<string, PageMeta> = {
       'applications',
       'software',
     ],
-    ogImage: '/meta/projects.png',
     twitterCard: 'summary_large_image',
   },
 
@@ -108,8 +104,7 @@ export const pageMetadata: Record<string, PageMeta> = {
       'qualifications',
       'download',
     ],
-    ogImage: '/meta/resume.png',
-    twitterCard: 'summary',
+    twitterCard: 'summary_large_image',
   },
 
   // Gears page
@@ -125,7 +120,6 @@ export const pageMetadata: Record<string, PageMeta> = {
       'productivity',
       'development environment',
     ],
-    ogImage: '/meta/gears.png',
     twitterCard: 'summary_large_image',
   },
 };
